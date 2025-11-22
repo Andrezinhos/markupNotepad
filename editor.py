@@ -3,7 +3,7 @@ from PySide6.QtGui import QAction, QFont, QIcon
 
 class Editor(QMainWindow):
     def __init__(self):
-        APP_VERSION = "0.4.0"
+        APP_VERSION = "0.4.1"
         super().__init__()
         self.setWindowTitle(f"Markup {APP_VERSION}")
         self.setWindowIcon(QIcon("favicon.ico"))
