@@ -19,8 +19,8 @@ class Editor(QMainWindow):
 
         # Menu bar
         menu = self.menuBar()
-        archive = menu.addMenu("Arquivo")
-        format = menu.addMenu("Formatar")
+        archive = menu.addMenu("Archive")
+        format = menu.addMenu("Format")
 
         open = QAction("Open File", self)
         save = QAction("Save File", self)
