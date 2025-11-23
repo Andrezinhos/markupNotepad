@@ -1,9 +1,9 @@
-from PySide6.QtWidgets import QMainWindow, QTextEdit, QFileDialog, QTabWidget
+from PySide6.QtWidgets import QMainWindow, QTextEdit, QFileDialog, QTabWidget, QTabBar
 from PySide6.QtGui import QAction, QFont, QIcon
 
 class Editor(QMainWindow):
     def __init__(self):
-        APP_VERSION = "0.4.1"
+        APP_VERSION = "0.5.2"
         super().__init__()
         self.setWindowTitle(f"Markup {APP_VERSION}")
         self.setWindowIcon(QIcon("favicon.ico"))
@@ -16,6 +16,10 @@ class Editor(QMainWindow):
         self.addNewTab(font)   
         self.tabs.addTab(QTextEdit(), "+")
         self.tabs.currentChanged.connect(self.checkNewTab)
+        self.tabs.setTabsClosable(True)
+        self.tabs.tabCloseRequested.connect(self.closeTab)
+        plusIndex = self.tabs.count() - 1
+        self.tabs.tabBar().setTabButton(plusIndex, QTabBar.RightSide, None)
 
         # Menu bar
         menu = self.menuBar()
@@ -74,3 +78,10 @@ class Editor(QMainWindow):
         if self.tabs.tabText(index) == "+":
             font = QFont("Arial", 12)
             self.addNewTab(font, "New Note")
+
+    def closeTab(self, index):
+        if self.tabs.tabText(index) != "+":
+            self.tabs.removeTab(index)
+        if self.tabs.count() == 1:
+            self.addNewTab(QFont("Arial", 12), "New Note")
+        
