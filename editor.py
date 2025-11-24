@@ -3,7 +3,7 @@ from PySide6.QtGui import QAction, QFont, QIcon
 
 class Editor(QMainWindow):
     def __init__(self):
-        APP_VERSION = "0.5.2"
+        APP_VERSION = "0.5.3"
         super().__init__()
         self.setWindowTitle(f"Markup {APP_VERSION}")
         self.setWindowIcon(QIcon("favicon.ico"))
@@ -15,11 +15,12 @@ class Editor(QMainWindow):
         self.setCentralWidget(self.tabs)
         self.addNewTab(font)   
         self.tabs.addTab(QTextEdit(), "+")
-        self.tabs.currentChanged.connect(self.checkNewTab)
+        self.tabs.currentChanged.connect(self.onTabChanged)
+        self.tabs.tabBar().tabBarClicked.connect(self.checkNewTab)
         self.tabs.setTabsClosable(True)
-        self.tabs.tabCloseRequested.connect(self.closeTab)
         plusIndex = self.tabs.count() - 1
         self.tabs.tabBar().setTabButton(plusIndex, QTabBar.RightSide, None)
+        self.tabs.tabCloseRequested.connect(self.closeTab)
 
         # Menu bar
         menu = self.menuBar()
@@ -75,13 +76,24 @@ class Editor(QMainWindow):
         self.tabs.setCurrentIndex(index)
 
     def checkNewTab(self, index):
+        if self.tabs.tabText(index) != "+":
+            self.tabs.currentChanged.disconnect(self.checkNewTab)
+            self.tabs.removeTab(index)
+            self.tabs.currentChanged.connect(self.checkNewTab)
         if self.tabs.tabText(index) == "+":
             font = QFont("Arial", 12)
             self.addNewTab(font, "New Note")
-
+    def onTabChanged(self, index):
+        pass
     def closeTab(self, index):
+        if index < 0 or index >= self.tabs.count():
+            return
+        
         if self.tabs.tabText(index) != "+":
             self.tabs.removeTab(index)
+
         if self.tabs.count() == 1:
             self.addNewTab(QFont("Arial", 12), "New Note")
-        
+
+        plusIndex = self.tabs.count() - 1
+        self.tabs.tabBar().setTabButton(plusIndex, QTabBar.RightSide, None)
