@@ -4,12 +4,11 @@ from tabs import Tabs
 
 class Editor(QMainWindow):
     def __init__(self):
-        APP_VERSION = "0.5.5"
+        APP_VERSION = "0.5.6"
         super().__init__()
         self.setWindowTitle(f"Markup {APP_VERSION}")
         self.setWindowIcon(QIcon("favicon.ico"))
         self.resize(800, 600)
-        font = QFont("Arial", 12)
 
         # Tabs
         self.tabs = Tabs()
