@@ -3,7 +3,7 @@ from PySide6.QtGui import QAction, QFont, QIcon
 
 class Editor(QMainWindow):
     def __init__(self):
-        APP_VERSION = "0.5.3"
+        APP_VERSION = "0.5.4"
         super().__init__()
         self.setWindowTitle(f"Markup {APP_VERSION}")
         self.setWindowIcon(QIcon("favicon.ico"))
@@ -86,8 +86,6 @@ class Editor(QMainWindow):
     def onTabChanged(self, index):
         pass
     def closeTab(self, index):
-        if index < 0 or index >= self.tabs.count():
-            return
         
         if self.tabs.tabText(index) != "+":
             self.tabs.removeTab(index)
