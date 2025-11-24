@@ -1,9 +1,10 @@
-from PySide6.QtWidgets import QMainWindow, QTextEdit, QFileDialog, QTabWidget, QTabBar
+from PySide6.QtWidgets import QMainWindow, QFileDialog
 from PySide6.QtGui import QAction, QFont, QIcon
+from tabs import Tabs
 
 class Editor(QMainWindow):
     def __init__(self):
-        APP_VERSION = "0.5.4"
+        APP_VERSION = "0.5.5"
         super().__init__()
         self.setWindowTitle(f"Markup {APP_VERSION}")
         self.setWindowIcon(QIcon("favicon.ico"))
@@ -11,16 +12,8 @@ class Editor(QMainWindow):
         font = QFont("Arial", 12)
 
         # Tabs
-        self.tabs = QTabWidget()
+        self.tabs = Tabs()
         self.setCentralWidget(self.tabs)
-        self.addNewTab(font)   
-        self.tabs.addTab(QTextEdit(), "+")
-        self.tabs.currentChanged.connect(self.onTabChanged)
-        self.tabs.tabBar().tabBarClicked.connect(self.checkNewTab)
-        self.tabs.setTabsClosable(True)
-        plusIndex = self.tabs.count() - 1
-        self.tabs.tabBar().setTabButton(plusIndex, QTabBar.RightSide, None)
-        self.tabs.tabCloseRequested.connect(self.closeTab)
 
         # Menu bar
         menu = self.menuBar()
@@ -68,30 +61,3 @@ class Editor(QMainWindow):
                 fileName = way.split("/")[-1]
                 self.tabs.setTabText(self.tabs.currentIndex(), fileName)
     
-    def addNewTab(self, font, title="New Note"):
-        textArea = QTextEdit()
-        textArea.setFont(font)
-        index = self.tabs.count() - 1
-        self.tabs.insertTab(index, textArea, title)
-        self.tabs.setCurrentIndex(index)
-
-    def checkNewTab(self, index):
-        if self.tabs.tabText(index) != "+":
-            self.tabs.currentChanged.disconnect(self.checkNewTab)
-            self.tabs.removeTab(index)
-            self.tabs.currentChanged.connect(self.checkNewTab)
-        if self.tabs.tabText(index) == "+":
-            font = QFont("Arial", 12)
-            self.addNewTab(font, "New Note")
-    def onTabChanged(self, index):
-        pass
-    def closeTab(self, index):
-        
-        if self.tabs.tabText(index) != "+":
-            self.tabs.removeTab(index)
-
-        if self.tabs.count() == 1:
-            self.addNewTab(QFont("Arial", 12), "New Note")
-
-        plusIndex = self.tabs.count() - 1
-        self.tabs.tabBar().setTabButton(plusIndex, QTabBar.RightSide, None)
