@@ -6,3 +6,4 @@ so I decided to create tools for each one use it, idepedent if your OS is close 
 this will be my mission, the Open Software, open for everyone
 
 I use the library PySide, version 6, and is created using a Virtual Environment (venv)
+this library is under the GNU Lesser General Public License (LGPL)
